@@ -47,7 +47,7 @@ import {
           </Row>
           <Row>
             <Text>
-              If you did not request this code, please ignore this email.
+              If you did not request this code, Please ignore this email. 
             </Text>
           </Row>
           {/* <Row>
