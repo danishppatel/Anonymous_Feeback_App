@@ -3,18 +3,15 @@ import UserModel from "@/model/User";
 import bcrypt from 'bcryptjs'
 
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
-import { fstat } from "fs";
-import { use } from "react";
 
 export async function POST(request: Request){
     // connect with Database
     await dbConnect();
-
+    
     try {
         const {username, email, password} = await request.json();
-
-
-       const existingUserVerifiedByUsername = await UserModel.findOne({
+      
+        const existingUserVerifiedByUsername = await UserModel.findOne({
             username,
             isVerified: true
         })
@@ -38,15 +35,15 @@ export async function POST(request: Request){
                 },{status: 400})
 
             } else{
-                //Save the updated User 
+                //Save the updated User
                 const hashPassword = await bcrypt.hash(password, 10);
-                existingUserByEmail.password = hashPassword;
+                existingUserByEmail.password = hashPassword;  
                 existingUserByEmail.verifyCode = verifyCode;
                 existingUserByEmail.verifyCodeExpiry =  new Date(Date.now() + 1*60*60*1000);
-                
-                
+                 
                 //  save onto the database
                 await existingUserByEmail.save();
+               
             }
         }
         else{
@@ -66,9 +63,10 @@ export async function POST(request: Request){
                 isAcceptingMessage : true,
                 messages : []
              })
-             
+
             //  save onto the database
             await newUser.save();
+
         }
 
         //send verification email
@@ -94,8 +92,7 @@ export async function POST(request: Request){
         console.error('Error registering user', error);
         return  Response.json({
                 success : false,
-                message : 'Error  registering user'
+                message : 'Error registering user'
             },{status: 500})
-
     }
 }
