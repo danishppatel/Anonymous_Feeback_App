@@ -1,28 +1,27 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
-import { use } from "react";
-
 
 export async function POST(request: Request) {
     await dbConnect();
 
     try {
         const {username, code} =  await request.json();
-        
         const decodedUsername = decodeURIComponent(username)
-        const user = await UserModel.findOne({username: decodedUsername});
+        const user = await UserModel.findOne({username : decodedUsername});
 
         if(!user){
             return  Response.json({
                 success : false,
                 message : 'User not found'
-            },{status: 400})
+            },{status: 404})
         }
 
+        // Check if the code is correct and not expired
         const isCodeValid = (user.verifyCode === code);
         const isCodeNotExpired = (new Date(user.verifyCodeExpiry) > new Date())
 
         if(isCodeValid && isCodeNotExpired){
+            // Update the user's verification status
             user.isVerified = true;
 
             await user.save();
@@ -52,7 +51,6 @@ export async function POST(request: Request) {
                 success : false,
                 message : 'Error registering user'
             },{status: 500})
-
     }
    
 }

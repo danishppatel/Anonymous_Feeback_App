@@ -9,7 +9,7 @@ export async function POST(request:Request) {
 
     const session =  await getServerSession(authOptions);
     const user: User = session?.user as User
-
+    
     if(!session || !session.user){
         return  Response.json({
             success : false,
@@ -30,8 +30,8 @@ export async function POST(request:Request) {
         if(!updatedUser){
             return  Response.json({
                 success : false,
-                message : 'Message Acceptance status failed'
-            },{status: 401})
+                message : 'Unable to find user to update message acceptance status'
+            },{status: 404})
         }
 
         return  Response.json({
@@ -72,7 +72,7 @@ export async function GET(request:Request) {
             return  Response.json({
                 success : false,
                 message : 'User not found'
-            },{status: 401})
+            },{status: 404})
         }
 
         return  Response.json({

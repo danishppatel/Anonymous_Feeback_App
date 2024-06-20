@@ -1,7 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import bcrypt from 'bcryptjs'
-
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 
 export async function POST(request: Request){
@@ -76,12 +75,12 @@ export async function POST(request: Request){
             verifyCode
         )
 
-        if(! emailResponse.success){
+        if(!emailResponse.success){
             return  Response.json({
                 success : false,
                 message : emailResponse.message
             },{status: 500})
-        }
+        };
 
         return  Response.json({
             success : true,

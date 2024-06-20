@@ -1,7 +1,6 @@
 import UserModel from "@/model/User";
 import dbConnect from "@/lib/dbConnect";
 import { Message } from "@/model/User";
-import { use } from "react";
 
 export async function POST(request :Request) {
     await dbConnect();
@@ -23,7 +22,7 @@ export async function POST(request :Request) {
             return  Response.json({
                 success : false,
                 message : 'User is not accepting messages'
-            },{status: 403})
+            },{status: 403})  
         }
 
         const newMessage = {content , createdAt: new Date()}
@@ -33,8 +32,8 @@ export async function POST(request :Request) {
 
         return  Response.json({
             success : true,
-            message : 'Message send Successfully'
-        },{status: 401})
+            message : 'Message sent Successfully'
+        },{status: 201})
 
     } catch (error) {
         console.error('Error adding messages', error);
